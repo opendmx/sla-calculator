@@ -19,24 +19,26 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="container">
         <header>
             <h1>SLA Calculator</h1>
             <p>Calculate Service Level Agreement uptime and downtime</p>
         </header>
 
-        <main>
+        <main id="main-content">
             <!-- Input Section -->
-            <section class="input-section">
-                <h2>Configuration</h2>
+            <section class="input-section" aria-labelledby="config-heading">
+                <h2 id="config-heading">Configuration</h2>
                 <div class="input-group">
                     <label for="sla-target">SLA Target (%)</label>
-                    <input type="number" id="sla-target" min="0" max="100" step="0.01" value="99.9" placeholder="99.9">
+                    <input type="number" id="sla-target" min="0" max="100" step="0.01" value="99.9" placeholder="99.9" aria-describedby="sla-help">
+                    <div id="sla-help" class="sr-only">Enter your desired SLA percentage between 0 and 100</div>
                 </div>
                 
                 <div class="input-group">
                     <label for="time-period">Time Period</label>
-                    <select id="time-period">
+                    <select id="time-period" aria-describedby="period-help">
                         <option value="minute">Per Minute</option>
                         <option value="hour">Per Hour</option>
                         <option value="day">Daily</option>
@@ -45,37 +47,39 @@
                         <option value="quarter">Quarterly</option>
                         <option value="year">Yearly</option>
                     </select>
+                    <div id="period-help" class="sr-only">Select the time period for SLA calculation</div>
                 </div>
 
                 <!-- Toggle Section -->
                 <div class="toggle-section">
                     <div class="toggle-group">
-                        <label class="toggle-label">
-                            <input type="checkbox" id="show-advanced" class="toggle-input">
-                            <span class="toggle-slider"></span>
+                        <label class="toggle-label" for="show-advanced">
+                            <input type="checkbox" id="show-advanced" class="toggle-input" aria-describedby="advanced-help">
+                            <span class="toggle-slider" role="presentation"></span>
                             Show Advanced Options
                         </label>
+                        <div id="advanced-help" class="sr-only">Toggle to show or hide advanced configuration options</div>
                     </div>
                 </div>
             </section>
 
             <!-- Results Section -->
-            <section class="results-section">
-                <h2>Results</h2>
+            <section class="results-section" aria-labelledby="results-heading" aria-live="polite">
+                <h2 id="results-heading">Results</h2>
                 <div class="results-grid">
                     <div class="result-card">
                         <h3>Allowed Downtime</h3>
-                        <div class="result-value" id="downtime-result">--</div>
+                        <div class="result-value" id="downtime-result" aria-label="Allowed downtime calculation result">--</div>
                     </div>
                     
                     <div class="result-card">
                         <h3>Uptime Required</h3>
-                        <div class="result-value" id="uptime-result">--</div>
+                        <div class="result-value" id="uptime-result" aria-label="Required uptime calculation result">--</div>
                     </div>
                     
                     <div class="result-card">
                         <h3>Availability</h3>
-                        <div class="result-value" id="availability-result">--</div>
+                        <div class="result-value" id="availability-result" aria-label="Availability percentage result">--</div>
                     </div>
                 </div>
             </section>
