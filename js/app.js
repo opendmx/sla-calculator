@@ -226,26 +226,27 @@ function calculateSLA(uptimePercentage, timePeriod, timeConfig = {}) {
     
     // When analyzing work impact, we need to show the results in work context
     if (periodData.configuration.analyzeWorkImpact && periodData.workMinutes) {
-        // The downtime is still the same absolute amount
-        // But we present uptime in context of work hours to show impact
-        const workUptimeMinutes = periodData.workMinutes - allowedDowntimeMinutes;
+        // The downtime is still the same absolute amount based on calendar time
+        // For work impact analysis, we show the worst-case scenario where all downtime occurs during work hours
         
-        // Format the results with work context
+        // Format the results - uptime remains calendar-based, downtime shows absolute amount
         const formattedDowntime = formatTime(allowedDowntimeMinutes);
-        const formattedWorkUptime = formatTime(Math.max(0, workUptimeMinutes));
+        const formattedUptime = formatTime(uptimeMinutes); // Use calendar uptime, not work uptime
         
-        // Calculate the effective availability during work hours
-        const workAvailabilityPercentage = Math.max(0, (workUptimeMinutes / periodData.workMinutes) * 100);
+        // Calculate the worst-case availability during work hours
+        // This shows what happens if all downtime occurs during work hours
+        const worstCaseWorkUptimeMinutes = Math.max(0, periodData.workMinutes - allowedDowntimeMinutes);
+        const workAvailabilityPercentage = Math.max(0, (worstCaseWorkUptimeMinutes / periodData.workMinutes) * 100);
         
         return {
             slaPercentage: uptimePercentage,
             timePeriod: timePeriod,
             allowedDowntimeMinutes: allowedDowntimeMinutes,
             uptimeMinutes: uptimeMinutes,
-            workUptimeMinutes: workUptimeMinutes,
+            workUptimeMinutes: worstCaseWorkUptimeMinutes,
             workAvailabilityPercentage: workAvailabilityPercentage,
             formattedDowntime: formattedDowntime,
-            formattedUptime: formattedWorkUptime,
+            formattedUptime: formattedUptime,
             periodData: periodData,
             timeConfig: timeConfig,
             isWorkImpactAnalysis: true
