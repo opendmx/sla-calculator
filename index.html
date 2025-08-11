@@ -64,22 +64,22 @@
                         <div id="weekends-help" class="sr-only">Toggle to include or exclude weekends in SLA calculations</div>
                     </div>
 
-                    <!-- Business Hours Toggle -->
+                    <!-- Work Time Impact Toggle -->
                     <div class="toggle-group">
                         <label class="toggle-label" for="business-hours">
                             <input type="checkbox" id="business-hours" class="toggle-input" aria-describedby="business-help">
                             <span class="toggle-slider" role="presentation"></span>
-                            Business Hours Only
+                            Analyze Work Time Impact
                         </label>
-                        <div id="business-help" class="sr-only">Toggle to calculate SLA based on business hours only</div>
+                        <div id="business-help" class="sr-only">Show worst-case impact of SLA downtime on work hours only (when everyone is working)</div>
                     </div>
 
-                    <!-- Business Hours Configuration -->
+                    <!-- Work Schedule Configuration -->
                     <div id="business-config" class="business-config" style="display: none;">
                         <div class="input-group">
                             <label for="work-hours-per-week">Work Hours per Week</label>
                             <input type="number" id="work-hours-per-week" min="1" max="168" value="40" aria-describedby="work-hours-help">
-                            <div id="work-hours-help" class="sr-only">Number of work hours per week (default: 40)</div>
+                            <div id="work-hours-help" class="sr-only">Number of work hours per week for impact analysis (default: 40)</div>
                         </div>
                         
                         <div class="input-group">
