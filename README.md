@@ -1,54 +1,50 @@
 # SLA Calculator
 
-A simple web-based Service Level Agreement (SLA) calculator to help you calculate uptime requirements and allowed downtime for different SLA targets.
+A simple, web-based Service Level Agreement (SLA) calculator that helps you calculate uptime requirements, downtime allowances, and SLA metrics for different time periods.
 
 ## Features
 
-- Calculate allowed downtime for different SLA percentages
-- Support for multiple time periods (daily, weekly, monthly, yearly)
-- Clean, modern interface with responsive design
-- Advanced options toggle for additional configuration
+- **Real-time calculations**: Automatic updates as you change inputs
+- **Multiple time periods**: Support for minute, hour, day, week, month, quarter, and year intervals
+- **URL parameter support**: Prefill SLA values via URL parameters (e.g., `?sla=99.9`)
+- **Clean, modern interface**: Responsive design that works on desktop and mobile
+- **Comprehensive breakdown**: Shows allowed downtime, required uptime, and availability percentage
 
-## How to Use
+## Usage Instructions
 
-1. Open `index.html` in your web browser
-2. Enter your desired SLA target percentage (e.g., 99.9%)
-3. Select the time period for calculation
-4. View the calculated results for allowed downtime, required uptime, and availability
+### Basic Usage
 
-## Development
+1. **Open the calculator**: Navigate to `index.html` in your web browser or visit the deployed URL
+2. **Set SLA Target**: Enter your desired SLA percentage (e.g., 99.9, 99.99, 99.999)
+3. **Select Time Period**: Choose from:
+   - Per Minute
+   - Per Hour  
+   - Daily
+   - Weekly
+   - Monthly
+   - Quarterly
+   - Yearly
+4. **View Results**: The calculator automatically displays:
+   - **Allowed Downtime**: Maximum downtime permitted for your SLA
+   - **Uptime Required**: Minimum uptime needed to meet SLA
+   - **Availability**: Your SLA percentage
 
-This is a static HTML/CSS/JavaScript project. No build system or server is required.
+### URL Parameters
 
-### Local Development
-
-Simply open `index.html` in your preferred web browser to view and test the application.
-
-### File Structure
+You can prefill the SLA target using URL parameters:
 
 ```
-.
-├── index.html          # Main HTML file
-├── css/
-│   └── styles.css      # Stylesheet with Inter font integration
-└── README.md           # This file
+https://your-domain.com/?sla=99.95
 ```
 
-## Browser Support
+This will automatically populate the input field with 99.95% when the page loads.
 
-Works in all modern browsers that support CSS Grid and Flexbox.
-=======
+### Examples
 
-
-A simple, web-based Service Level Agreement (SLA) calculator that helps you calculate uptime requirements, downtime allowances, and SLA metrics.
-
-## Overview
-
-This tool provides an easy way to:
-- Calculate uptime percentages (99%, 99.9%, 99.99%, 99.999%)
-- Convert between different time periods (daily, monthly, yearly)
-- Determine allowable downtime for given SLA targets
-- Understand the real-world impact of SLA commitments
+- **99.9% Monthly SLA**: Allows 43.2 minutes of downtime per month
+- **99.99% Yearly SLA**: Allows 52.6 minutes of downtime per year  
+- **99.5% Daily SLA**: Allows 7.2 minutes of downtime per day
+- **99.9% Per Hour SLA**: Allows 0.6 minutes (36 seconds) of downtime per hour
 
 ## Quick Start
 
@@ -84,17 +80,34 @@ This application is designed to work with GitHub Pages. Simply enable GitHub Pag
 ```
 ├── index.html          # Main application page
 ├── css/               # Stylesheets
+│   └── styles.css     # Main stylesheet with modern design
 ├── js/                # JavaScript files
-├── docs/              # Documentation
+│   └── app.js         # SLA calculation logic and UI integration
+├── docs/              # Documentation and alternative implementation
 ├── spec.md            # Detailed project specification
 ├── brainstorm.md      # Project ideas and planning
 ├── .nojekyll          # Prevents Jekyll processing on GitHub Pages
 └── README.md          # This file
 ```
 
+## How It Works
+
+The calculator uses precise mathematical calculations to determine SLA metrics:
+
+1. **Downtime Calculation**: `(100 - SLA%) / 100 * Total Time Period`
+2. **Uptime Calculation**: `Total Time Period - Allowed Downtime`
+3. **Time Formatting**: Intelligent formatting showing the most appropriate units (seconds, minutes, hours, days, weeks, years)
+
 ## Documentation
 
 For detailed project specifications and requirements, see [spec.md](spec.md).
+
+## Browser Support
+
+Works in all modern browsers that support:
+- CSS Grid and Flexbox
+- ES6 JavaScript features
+- URL API for parameter parsing
 
 ## Contributing
 
