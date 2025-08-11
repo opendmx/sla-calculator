@@ -202,7 +202,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayResults(results) {
         downtimeResult.textContent = results.formattedDowntime;
         uptimeResult.textContent = results.formattedUptime;
-        availabilityResult.textContent = results.slaPercentage + '%';
+        
+        // Show different availability based on analysis mode
+        if (results.isWorkImpactAnalysis) {
+            // Show the actual calendar SLA percentage, but note it's work impact analysis
+            availabilityResult.textContent = results.slaPercentage + '% (calendar)';
+        } else {
+            availabilityResult.textContent = results.slaPercentage + '%';
+        }
     }
 });
 
@@ -211,32 +218,61 @@ function calculateSLA(uptimePercentage, timePeriod, timeConfig = {}) {
     const downtimePercentage = 100 - uptimePercentage;
     const periodData = getTimePeriodData(timePeriod, timeConfig);
     
-    // Calculate total downtime in minutes
+    // Calculate total downtime in minutes based on calendar time (standard SLA calculation)
     const allowedDowntimeMinutes = (downtimePercentage / 100) * periodData.totalMinutes;
     
     // Calculate uptime in minutes
     const uptimeMinutes = periodData.totalMinutes - allowedDowntimeMinutes;
     
-    // Format the results
-    const formattedDowntime = formatTime(allowedDowntimeMinutes);
-    const formattedUptime = formatTime(uptimeMinutes);
-    
-    return {
-        slaPercentage: uptimePercentage,
-        timePeriod: timePeriod,
-        allowedDowntimeMinutes: allowedDowntimeMinutes,
-        uptimeMinutes: uptimeMinutes,
-        formattedDowntime: formattedDowntime,
-        formattedUptime: formattedUptime,
-        periodData: periodData,
-        timeConfig: timeConfig
-    };
+    // When analyzing work impact, we need to show the results in work context
+    if (periodData.configuration.analyzeWorkImpact && periodData.workMinutes) {
+        // The downtime is still the same absolute amount
+        // But we present uptime in context of work hours to show impact
+        const workUptimeMinutes = periodData.workMinutes - allowedDowntimeMinutes;
+        
+        // Format the results with work context
+        const formattedDowntime = formatTime(allowedDowntimeMinutes);
+        const formattedWorkUptime = formatTime(Math.max(0, workUptimeMinutes));
+        
+        // Calculate the effective availability during work hours
+        const workAvailabilityPercentage = Math.max(0, (workUptimeMinutes / periodData.workMinutes) * 100);
+        
+        return {
+            slaPercentage: uptimePercentage,
+            timePeriod: timePeriod,
+            allowedDowntimeMinutes: allowedDowntimeMinutes,
+            uptimeMinutes: uptimeMinutes,
+            workUptimeMinutes: workUptimeMinutes,
+            workAvailabilityPercentage: workAvailabilityPercentage,
+            formattedDowntime: formattedDowntime,
+            formattedUptime: formattedWorkUptime,
+            periodData: periodData,
+            timeConfig: timeConfig,
+            isWorkImpactAnalysis: true
+        };
+    } else {
+        // Standard calculation and formatting
+        const formattedDowntime = formatTime(allowedDowntimeMinutes);
+        const formattedUptime = formatTime(uptimeMinutes);
+        
+        return {
+            slaPercentage: uptimePercentage,
+            timePeriod: timePeriod,
+            allowedDowntimeMinutes: allowedDowntimeMinutes,
+            uptimeMinutes: uptimeMinutes,
+            formattedDowntime: formattedDowntime,
+            formattedUptime: formattedUptime,
+            periodData: periodData,
+            timeConfig: timeConfig,
+            isWorkImpactAnalysis: false
+        };
+    }
 }
 
 function getTimePeriodData(timePeriod, timeConfig = {}) {
     // Default configuration for backward compatibility  
     const includeWeekends = timeConfig.includeWeekends !== false; // default true
-    const businessHours = timeConfig.businessHours === true; // default false
+    const analyzeWorkImpact = timeConfig.businessHours === true; // renamed for clarity
     const workHoursPerWeek = timeConfig.workHoursPerWeek || 40;
     const workStartHour = timeConfig.workStartHour || 8;
     const workEndHour = timeConfig.workEndHour || 18;
@@ -247,7 +283,7 @@ function getTimePeriodData(timePeriod, timeConfig = {}) {
         workHoursPerDay += 24; // Handle overnight shifts
     }
     
-    // Base periods (24/7 calendar time)
+    // Base periods (24/7 calendar time) - SLA is always calculated against calendar time
     const basePeriods = {
         minute: 1,
         hour: 60,
@@ -260,44 +296,11 @@ function getTimePeriodData(timePeriod, timeConfig = {}) {
     
     let totalMinutes = basePeriods[timePeriod] || basePeriods.month;
     
-    // Apply weekend exclusion (if not including weekends)
-    if (!includeWeekends && !businessHours) {
+    // Apply weekend exclusion only when not analyzing work impact
+    // When analyzing work impact, we need full calendar calculation for the base SLA
+    if (!includeWeekends && !analyzeWorkImpact) {
         // Reduce by weekend ratio (5/7 for weekdays only)
         totalMinutes = totalMinutes * (5/7);
-    }
-    
-    // Apply business hours calculation
-    if (businessHours) {
-        switch (timePeriod) {
-            case 'minute':
-                // For business hours, a minute is still a minute
-                totalMinutes = 1;
-                break;
-            case 'hour':
-                // For business hours, an hour is still an hour  
-                totalMinutes = 60;
-                break;
-            case 'day':
-                // Use configured work hours per day
-                totalMinutes = workHoursPerDay * 60;
-                break;
-            case 'week':
-                // Use configured work hours per week
-                totalMinutes = workHoursPerWeek * 60;
-                break;
-            case 'month':
-                // Approximately 4.33 weeks per month
-                totalMinutes = workHoursPerWeek * 4.33 * 60;
-                break;
-            case 'quarter':
-                // 13 weeks per quarter
-                totalMinutes = workHoursPerWeek * 13 * 60;
-                break;
-            case 'year':
-                // 52 weeks per year
-                totalMinutes = workHoursPerWeek * 52 * 60;
-                break;
-        }
     }
     
     const periodData = {
@@ -305,13 +308,53 @@ function getTimePeriodData(timePeriod, timeConfig = {}) {
         name: timePeriod
     };
     
+    // When analyzing work impact, calculate work time periods for context
+    if (analyzeWorkImpact) {
+        let workMinutes;
+        switch (timePeriod) {
+            case 'minute':
+                // For work impact, show how much of work minute this represents
+                workMinutes = (workHoursPerDay * 60) / (24 * 60); // fraction of work time in a day
+                break;
+            case 'hour':
+                // For work impact, show how much of work hour this represents  
+                workMinutes = (workHoursPerDay * 60) / (24 * 60) * 60; // work fraction * 60 minutes
+                break;
+            case 'day':
+                // Work hours per day
+                workMinutes = workHoursPerDay * 60;
+                break;
+            case 'week':
+                // Work hours per week
+                workMinutes = workHoursPerWeek * 60;
+                break;
+            case 'month':
+                // Approximately 4.33 weeks per month
+                workMinutes = workHoursPerWeek * 4.33 * 60;
+                break;
+            case 'quarter':
+                // 13 weeks per quarter
+                workMinutes = workHoursPerWeek * 13 * 60;
+                break;
+            case 'year':
+                // 52 weeks per year
+                workMinutes = workHoursPerWeek * 52 * 60;
+                break;
+            default:
+                workMinutes = workHoursPerWeek * 60;
+        }
+        
+        periodData.workMinutes = workMinutes;
+        periodData.workImpactRatio = workMinutes / totalMinutes;
+    }
+    
     // Add configuration info to the period data
     periodData.configuration = {
         includeWeekends,
-        businessHours,
+        analyzeWorkImpact,
         workHoursPerWeek,
         workHoursPerDay,
-        calculationMode: businessHours ? 'business' : (includeWeekends ? 'calendar' : 'weekdays')
+        calculationMode: analyzeWorkImpact ? 'work-impact' : (includeWeekends ? 'calendar' : 'weekdays')
     };
     
     return periodData;
