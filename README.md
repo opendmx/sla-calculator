@@ -102,6 +102,47 @@ The calculator uses precise mathematical calculations to determine SLA metrics:
 
 For detailed project specifications and requirements, see [spec.md](spec.md).
 
+## Styling Guidelines
+
+The SLA Calculator follows modern UI/UX design principles with a focus on accessibility and usability:
+
+### Typography
+- **Primary font**: Inter (Google Fonts) with comprehensive fallback stack
+- **Font weights**: 300, 400, 500, 600, 700 for proper hierarchy
+- **Line height**: 1.6 for optimal readability
+- **Font smoothing**: Enabled for crisp rendering across browsers
+
+### Color Palette
+- **Background**: #f8fafc (light gray-blue)
+- **Primary text**: #1e293b (dark slate)
+- **Secondary text**: #64748b (slate gray)
+- **Accent**: #3b82f6 (blue) for interactive elements
+- **Cards**: White with subtle shadows for depth
+
+### Layout & Spacing
+- **Container**: Maximum width of 1200px, centered with 2rem padding
+- **Grid system**: 2-column layout on desktop, single column on mobile
+- **Card spacing**: 2rem gap between sections, 1.5rem internal padding
+- **Border radius**: 12px for cards, 8px for inputs
+
+### Responsive Design
+- **Breakpoints**: 768px for tablet, 480px for mobile
+- **Mobile-first approach**: Single column layout with reduced padding
+- **Touch-friendly**: Minimum 44px touch targets
+
+### Accessibility Features
+- **ARIA labels**: Comprehensive labeling for screen readers
+- **Skip link**: Keyboard navigation to main content
+- **Color contrast**: WCAG AA compliant ratios
+- **Focus indicators**: Clear visual focus states
+- **Live regions**: Dynamic content updates announced to screen readers
+
+### Component Guidelines
+- **Input fields**: Consistent padding, focus states, and validation styling
+- **Buttons/toggles**: Clear visual feedback and hover states
+- **Results cards**: High contrast, tabular numbers for easy scanning
+- **Error states**: Clear messaging with appropriate ARIA attributes
+
 ## Browser Support
 
 Works in all modern browsers that support:
