@@ -36,19 +36,7 @@
                     <div id="sla-help" class="sr-only">Enter your desired SLA percentage between 0 and 100</div>
                 </div>
                 
-                <div class="input-group">
-                    <label for="time-period">Time Period</label>
-                    <select id="time-period" aria-describedby="period-help">
-                        <option value="minute">Per Minute</option>
-                        <option value="hour">Per Hour</option>
-                        <option value="day">Daily</option>
-                        <option value="week">Weekly</option>
-                        <option value="month" selected>Monthly</option>
-                        <option value="quarter">Quarterly</option>
-                        <option value="year">Yearly</option>
-                    </select>
-                    <div id="period-help" class="sr-only">Select the time period for SLA calculation</div>
-                </div>
+
 
                 <!-- Toggle Section -->
                 <div class="toggle-section">
@@ -161,21 +149,41 @@
 
             <!-- Results Section -->
             <section class="results-section" aria-labelledby="results-heading" aria-live="polite">
-                <h2 id="results-heading">Results</h2>
+                <h2 id="results-heading">Downtime Allowances</h2>
                 <div class="results-grid">
                     <div class="result-card">
-                        <h3>Allowed Downtime</h3>
-                        <div class="result-value" id="downtime-result" aria-label="Allowed downtime calculation result">--</div>
+                        <h3>Per Minute</h3>
+                        <div class="result-value" id="downtime-minute" aria-label="Allowed downtime per minute">--</div>
                     </div>
                     
                     <div class="result-card">
-                        <h3>Uptime Required</h3>
-                        <div class="result-value" id="uptime-result" aria-label="Required uptime calculation result">--</div>
+                        <h3>Per Hour</h3>
+                        <div class="result-value" id="downtime-hour" aria-label="Allowed downtime per hour">--</div>
                     </div>
                     
                     <div class="result-card">
-                        <h3>Availability</h3>
-                        <div class="result-value" id="availability-result" aria-label="Availability percentage result">--</div>
+                        <h3>Daily</h3>
+                        <div class="result-value" id="downtime-day" aria-label="Allowed downtime per day">--</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Weekly</h3>
+                        <div class="result-value" id="downtime-week" aria-label="Allowed downtime per week">--</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Monthly</h3>
+                        <div class="result-value" id="downtime-month" aria-label="Allowed downtime per month">--</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Quarterly</h3>
+                        <div class="result-value" id="downtime-quarter" aria-label="Allowed downtime per quarter">--</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Yearly</h3>
+                        <div class="result-value" id="downtime-year" aria-label="Allowed downtime per year">--</div>
                     </div>
                 </div>
             </section>
