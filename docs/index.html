@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background: #007cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005a8b;
+        }
+        .result {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SLA Calculator</h1>
+    <p>Calculate Service Level Agreement (SLA) uptime percentages and allowable downtime.</p>
+    
+    <div class="container">
+        <h2>Calculate SLA Uptime</h2>
+        <label for="uptime">SLA Uptime Percentage (%):</label>
+        <input type="number" id="uptime" step="0.01" min="0" max="100" value="99.9">
+        
+        <label for="period">Time Period:</label>
+        <select id="period">
+            <option value="month">Monthly</option>
+            <option value="year">Yearly</option>
+            <option value="day">Daily</option>
+        </select>
+        
+        <button onclick="calculateDowntime()">Calculate Allowable Downtime</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Results:</h3>
+            <p id="downtime-result"></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>About SLA Calculator</h2>
+        <p>This tool helps you calculate the allowable downtime for different SLA uptime percentages:</p>
+        <ul>
+            <li><strong>99.9%</strong> - 8.77 hours per year</li>
+            <li><strong>99.95%</strong> - 4.38 hours per year</li>
+            <li><strong>99.99%</strong> - 52.6 minutes per year</li>
+            <li><strong>99.999%</strong> - 5.26 minutes per year</li>
+        </ul>
+    </div>
+
+    <script>
+        function calculateDowntime() {
+            const uptime = parseFloat(document.getElementById('uptime').value);
+            const period = document.getElementById('period').value;
+            
+            if (uptime < 0 || uptime > 100) {
+                alert('Please enter a valid uptime percentage between 0 and 100');
+                return;
+            }
+            
+            const downtimePercentage = 100 - uptime;
+            let totalMinutes;
+            let periodText;
+            
+            switch(period) {
+                case 'month':
+                    totalMinutes = 30 * 24 * 60; // 30 days
+                    periodText = 'month';
+                    break;
+                case 'year':
+                    totalMinutes = 365 * 24 * 60; // 365 days
+                    periodText = 'year';
+                    break;
+                case 'day':
+                    totalMinutes = 24 * 60; // 24 hours
+                    periodText = 'day';
+                    break;
+            }
+            
+            const allowableDowntimeMinutes = (downtimePercentage / 100) * totalMinutes;
+            const hours = Math.floor(allowableDowntimeMinutes / 60);
+            const minutes = Math.round(allowableDowntimeMinutes % 60);
+            
+            let result = `<strong>SLA: ${uptime}% uptime</strong><br>`;
+            result += `<strong>Allowable downtime per ${periodText}:</strong><br>`;
+            
+            if (hours > 0) {
+                result += `${hours} hours and ${minutes} minutes<br>`;
+            } else {
+                result += `${minutes} minutes<br>`;
+            }
+            
+            result += `(${allowableDowntimeMinutes.toFixed(2)} total minutes)`;
+            
+            document.getElementById('downtime-result').innerHTML = result;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
