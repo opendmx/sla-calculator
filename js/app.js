@@ -5,10 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Get DOM elements
     const slaTargetInput = document.getElementById('sla-target');
-    const timePeriodSelect = document.getElementById('time-period');
-    const downtimeResult = document.getElementById('downtime-result');
-    const uptimeResult = document.getElementById('uptime-result');
-    const availabilityResult = document.getElementById('availability-result');
+    const downtimeResults = {
+        minute: document.getElementById('downtime-minute'),
+        hour: document.getElementById('downtime-hour'),
+        day: document.getElementById('downtime-day'),
+        week: document.getElementById('downtime-week'),
+        month: document.getElementById('downtime-month'),
+        quarter: document.getElementById('downtime-quarter'),
+        year: document.getElementById('downtime-year')
+    };
     
     // Advanced options elements
     const showAdvancedToggle = document.getElementById('show-advanced');
@@ -29,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add event listeners for real-time updates
     slaTargetInput.addEventListener('input', updateResults);
-    timePeriodSelect.addEventListener('change', updateResults);
     
     // Advanced options event listeners
     showAdvancedToggle.addEventListener('change', toggleAdvancedOptions);
@@ -89,11 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const workHours = urlParams.get('workHours');
         const startHour = urlParams.get('startHour');
         const endHour = urlParams.get('endHour');
-        const period = urlParams.get('period');
-        
-        if (period && ['minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'].includes(period)) {
-            timePeriodSelect.value = period;
-        }
+
         if (includeWeekends !== null) {
             includeWeekendsToggle.checked = includeWeekends === 'true';
         }
@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateResults() {
         const slaPercentage = parseFloat(slaTargetInput.value);
-        const timePeriod = timePeriodSelect.value;
         const timeConfig = getTimeConfiguration();
         
         if (isNaN(slaPercentage) || slaPercentage < 0 || slaPercentage > 100) {
@@ -189,27 +188,27 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const results = calculateSLA(slaPercentage, timePeriod, timeConfig);
-        displayResults(results);
+        // Calculate for all time periods
+        const timePeriods = ['minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
+        const allResults = {};
+        
+        timePeriods.forEach(period => {
+            allResults[period] = calculateSLA(slaPercentage, period, timeConfig);
+        });
+        
+        displayResults(allResults);
     }
     
     function displayError() {
-        downtimeResult.textContent = '--';
-        uptimeResult.textContent = '--';
-        availabilityResult.textContent = '--';
+        Object.keys(downtimeResults).forEach(period => {
+            downtimeResults[period].textContent = '--';
+        });
     }
     
-    function displayResults(results) {
-        downtimeResult.textContent = results.formattedDowntime;
-        uptimeResult.textContent = results.formattedUptime;
-        
-        // Show different availability based on analysis mode
-        if (results.isWorkImpactAnalysis) {
-            // Show the actual calendar SLA percentage, but note it's work impact analysis
-            availabilityResult.textContent = results.slaPercentage + '% (calendar)';
-        } else {
-            availabilityResult.textContent = results.slaPercentage + '%';
-        }
+    function displayResults(allResults) {
+        Object.keys(allResults).forEach(period => {
+            downtimeResults[period].textContent = allResults[period].formattedDowntime;
+        });
     }
 });
 
@@ -361,49 +360,20 @@ function getTimePeriodData(timePeriod, timeConfig = {}) {
 }
 
 function formatTime(totalMinutes) {
-    if (totalMinutes < 1) {
-        return (totalMinutes * 60).toFixed(1) + ' seconds';
-    }
+    // Convert minutes to total seconds
+    const totalSeconds = Math.round(totalMinutes * 60);
     
-    if (totalMinutes < 60) {
-        return totalMinutes.toFixed(1) + ' minutes';
-    }
+    // Calculate days, hours, minutes, and seconds
+    const days = Math.floor(totalSeconds / (24 * 60 * 60));
+    const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+    const seconds = totalSeconds % 60;
     
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = Math.round(totalMinutes % 60);
+    // Format as dd:hh:mm:ss with leading zeros
+    const dd = days.toString().padStart(2, '0');
+    const hh = hours.toString().padStart(2, '0');
+    const mm = minutes.toString().padStart(2, '0');
+    const ss = seconds.toString().padStart(2, '0');
     
-    if (hours < 24) {
-        if (minutes === 0) {
-            return hours + ' hours';
-        }
-        return hours + 'h ' + minutes + 'm';
-    }
-    
-    const days = Math.floor(hours / 24);
-    const remainingHours = hours % 24;
-    
-    if (days < 7) {
-        if (remainingHours === 0) {
-            return days + ' days';
-        }
-        return days + 'd ' + remainingHours + 'h';
-    }
-    
-    const weeks = Math.floor(days / 7);
-    const remainingDays = days % 7;
-    
-    if (weeks < 52) {
-        if (remainingDays === 0) {
-            return weeks + ' weeks';
-        }
-        return weeks + 'w ' + remainingDays + 'd';
-    }
-    
-    const years = Math.floor(weeks / 52);
-    const remainingWeeks = weeks % 52;
-    
-    if (remainingWeeks === 0) {
-        return years + ' years';
-    }
-    return years + 'y ' + remainingWeeks + 'w';
+    return `${dd}:${hh}:${mm}:${ss}`;
 }
