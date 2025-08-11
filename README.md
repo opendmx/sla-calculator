@@ -6,7 +6,11 @@ A simple, web-based Service Level Agreement (SLA) calculator that helps you calc
 
 - **Real-time calculations**: Automatic updates as you change inputs
 - **Multiple time periods**: Support for minute, hour, day, week, month, quarter, and year intervals
-- **URL parameter support**: Prefill SLA values via URL parameters (e.g., `?sla=99.9`)
+- **Advanced time configuration**: Choose between calendar time, weekdays only, or business hours
+- **Weekend inclusion/exclusion**: Toggle weekend consideration in calculations
+- **Business hours support**: Configure work schedules with custom hours and workweek length
+- **URL parameter support**: Prefill SLA values and configuration via URL parameters
+- **Settings persistence**: Automatically save and restore your configuration preferences
 - **Clean, modern interface**: Responsive design that works on desktop and mobile
 - **Comprehensive breakdown**: Shows allowed downtime, required uptime, and availability percentage
 
@@ -31,13 +35,52 @@ A simple, web-based Service Level Agreement (SLA) calculator that helps you calc
 
 ### URL Parameters
 
-You can prefill the SLA target using URL parameters:
+You can prefill configuration settings using URL parameters:
 
+#### Basic Parameters
 ```
 https://your-domain.com/?sla=99.95
+https://your-domain.com/?sla=99.9&period=year
 ```
 
-This will automatically populate the input field with 99.95% when the page loads.
+#### Advanced Configuration Parameters
+```
+# Business hours only with custom work schedule
+https://your-domain.com/?sla=99.99&business=true&workHours=50
+
+# Weekdays only (excluding weekends)  
+https://your-domain.com/?sla=99.9&weekends=false
+
+# Complete configuration
+https://your-domain.com/?sla=99.95&period=year&weekends=true&business=true&workHours=40&startHour=9&endHour=17
+```
+
+#### Supported Parameters
+- `sla`: SLA percentage (0-100)
+- `period`: Time period (`minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`)
+- `weekends`: Include weekends (`true`, `false`)
+- `business`: Business hours mode (`true`, `false`)
+- `workHours`: Work hours per week (1-168)
+- `startHour`: Work start hour (0-23)
+- `endHour`: Work end hour (0-23)
+
+### Advanced Time Configuration
+
+Click "Show Advanced Options" to access:
+
+#### Weekend Configuration
+- **Include Weekends**: Toggle to include or exclude weekends from calculations
+- When disabled, calculations are based on weekdays only (Monday-Friday)
+
+#### Business Hours Configuration  
+- **Business Hours Only**: Calculate based on business hours instead of 24/7
+- **Work Hours per Week**: Configure total weekly work hours (default: 40)
+- **Work Start/End Hour**: Set daily work schedule (default: 8 AM - 6 PM)
+
+#### Calculation Examples
+- **99.9% Yearly (24/7)**: 8h 46m allowed downtime
+- **99.9% Yearly (weekdays only)**: 6h 15m allowed downtime  
+- **99.9% Yearly (40h business hours)**: 2h 5m allowed downtime
 
 ### Examples
 
@@ -100,7 +143,9 @@ The calculator uses precise mathematical calculations to determine SLA metrics:
 
 ## Documentation
 
-For detailed project specifications and requirements, see [spec.md](spec.md).
+For detailed usage instructions and examples, see:
+- **[Usage Guide](docs/usage.md)**: Comprehensive feature walkthrough with examples
+- **[Project Specification](spec.md)**: Detailed project requirements and technical specifications
 
 ## Styling Guidelines
 

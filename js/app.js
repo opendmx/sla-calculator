@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const workEndHourSelect = document.getElementById('work-end-hour');
     
     // Parse URL parameters and load settings on load
-    parseURLParameters();
-    loadSettings();
+    loadSettings(); // Load from localStorage first
+    parseURLParameters(); // Then override with URL parameters (higher priority)
     
     // Calculate initial values
     updateResults();
@@ -89,7 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const workHours = urlParams.get('workHours');
         const startHour = urlParams.get('startHour');
         const endHour = urlParams.get('endHour');
+        const period = urlParams.get('period');
         
+        if (period && ['minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'].includes(period)) {
+            timePeriodSelect.value = period;
+        }
         if (includeWeekends !== null) {
             includeWeekendsToggle.checked = includeWeekends === 'true';
         }
