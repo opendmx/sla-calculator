@@ -187,6 +187,42 @@ section h2 {
     transform: translateX(20px);
 }
 
+/* Advanced Options */
+.advanced-options {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.advanced-options h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.advanced-options .toggle-group {
+    margin-bottom: 1rem;
+}
+
+.business-config {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f1f5f9;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+}
+
+.business-config .input-group {
+    margin-bottom: 1rem;
+}
+
+.business-config .input-group:last-child {
+    margin-bottom: 0;
+}
+
 /* Results */
 .results-grid {
     display: grid;

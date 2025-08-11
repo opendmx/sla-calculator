@@ -61,6 +61,102 @@
                         <div id="advanced-help" class="sr-only">Toggle to show or hide advanced configuration options</div>
                     </div>
                 </div>
+
+                <!-- Advanced Options Section -->
+                <div id="advanced-options" class="advanced-options" style="display: none;">
+                    <h3>Time Configuration</h3>
+                    
+                    <!-- Weekend Toggle -->
+                    <div class="toggle-group">
+                        <label class="toggle-label" for="include-weekends">
+                            <input type="checkbox" id="include-weekends" class="toggle-input" checked aria-describedby="weekends-help">
+                            <span class="toggle-slider" role="presentation"></span>
+                            Include Weekends
+                        </label>
+                        <div id="weekends-help" class="sr-only">Toggle to include or exclude weekends in SLA calculations</div>
+                    </div>
+
+                    <!-- Business Hours Toggle -->
+                    <div class="toggle-group">
+                        <label class="toggle-label" for="business-hours">
+                            <input type="checkbox" id="business-hours" class="toggle-input" aria-describedby="business-help">
+                            <span class="toggle-slider" role="presentation"></span>
+                            Business Hours Only
+                        </label>
+                        <div id="business-help" class="sr-only">Toggle to calculate SLA based on business hours only</div>
+                    </div>
+
+                    <!-- Business Hours Configuration -->
+                    <div id="business-config" class="business-config" style="display: none;">
+                        <div class="input-group">
+                            <label for="work-hours-per-week">Work Hours per Week</label>
+                            <input type="number" id="work-hours-per-week" min="1" max="168" value="40" aria-describedby="work-hours-help">
+                            <div id="work-hours-help" class="sr-only">Number of work hours per week (default: 40)</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="work-start-hour">Work Start Hour</label>
+                            <select id="work-start-hour" aria-describedby="start-hour-help">
+                                <option value="0">12:00 AM</option>
+                                <option value="1">1:00 AM</option>
+                                <option value="2">2:00 AM</option>
+                                <option value="3">3:00 AM</option>
+                                <option value="4">4:00 AM</option>
+                                <option value="5">5:00 AM</option>
+                                <option value="6">6:00 AM</option>
+                                <option value="7">7:00 AM</option>
+                                <option value="8" selected>8:00 AM</option>
+                                <option value="9">9:00 AM</option>
+                                <option value="10">10:00 AM</option>
+                                <option value="11">11:00 AM</option>
+                                <option value="12">12:00 PM</option>
+                                <option value="13">1:00 PM</option>
+                                <option value="14">2:00 PM</option>
+                                <option value="15">3:00 PM</option>
+                                <option value="16">4:00 PM</option>
+                                <option value="17">5:00 PM</option>
+                                <option value="18">6:00 PM</option>
+                                <option value="19">7:00 PM</option>
+                                <option value="20">8:00 PM</option>
+                                <option value="21">9:00 PM</option>
+                                <option value="22">10:00 PM</option>
+                                <option value="23">11:00 PM</option>
+                            </select>
+                            <div id="start-hour-help" class="sr-only">Work day start hour</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="work-end-hour">Work End Hour</label>
+                            <select id="work-end-hour" aria-describedby="end-hour-help">
+                                <option value="1">1:00 AM</option>
+                                <option value="2">2:00 AM</option>
+                                <option value="3">3:00 AM</option>
+                                <option value="4">4:00 AM</option>
+                                <option value="5">5:00 AM</option>
+                                <option value="6">6:00 AM</option>
+                                <option value="7">7:00 AM</option>
+                                <option value="8">8:00 AM</option>
+                                <option value="9">9:00 AM</option>
+                                <option value="10">10:00 AM</option>
+                                <option value="11">11:00 AM</option>
+                                <option value="12">12:00 PM</option>
+                                <option value="13">1:00 PM</option>
+                                <option value="14">2:00 PM</option>
+                                <option value="15">3:00 PM</option>
+                                <option value="16">4:00 PM</option>
+                                <option value="17">5:00 PM</option>
+                                <option value="18" selected>6:00 PM</option>
+                                <option value="19">7:00 PM</option>
+                                <option value="20">8:00 PM</option>
+                                <option value="21">9:00 PM</option>
+                                <option value="22">10:00 PM</option>
+                                <option value="23">11:00 PM</option>
+                                <option value="0">12:00 AM</option>
+                            </select>
+                            <div id="end-hour-help" class="sr-only">Work day end hour</div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Results Section -->
