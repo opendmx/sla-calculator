@@ -29,16 +29,16 @@
         <main id="main-content">
             <!-- Input Section -->
             <section class="input-section" aria-labelledby="config-heading">
-                <h2 id="config-heading">Configuration</h2>
+                <h2 id="config-heading">Calculator Settings</h2>
+                
+                <!-- Primary SLA Input -->
                 <div class="input-group">
                     <label for="sla-target">SLA Target (%)</label>
                     <input type="number" id="sla-target" min="0" max="100" step="0.01" value="99.9" placeholder="99.9" aria-describedby="sla-help">
-                    <div id="sla-help" class="sr-only">Enter your desired SLA percentage between 0 and 100</div>
+                    <div id="sla-help" class="field-help">Enter your desired SLA percentage between 0 and 100</div>
                 </div>
-                
 
-
-                <!-- Toggle Section -->
+                <!-- Advanced Options Toggle -->
                 <div class="toggle-section">
                     <div class="toggle-group">
                         <label class="toggle-label" for="show-advanced">
@@ -46,112 +46,13 @@
                             <span class="toggle-slider" role="presentation"></span>
                             Show Advanced Options
                         </label>
-                        <div id="advanced-help" class="sr-only">Toggle to show or hide advanced configuration options</div>
+                        <div id="advanced-help" class="field-help">Toggle to show additional configuration options</div>
                     </div>
                 </div>
 
-                <!-- Advanced Options Section -->
+                <!-- Advanced Configuration Options -->
                 <div id="advanced-options" class="advanced-options" style="display: none;">
-                    <h3>Time Configuration</h3>
-                    
-                    <!-- Help Section - Always Visible -->
-                    <div class="help-section">
-                        <div id="help-content" class="help-content">
-                            <div class="help-card">
-                                <h4>🔍 How These Options Work</h4>
-                                <p class="help-intro">These advanced settings help you understand SLA impact in different operational scenarios. All calculations follow industry standards.</p>
-                                
-                                <div class="help-item">
-                                    <h5>📅 Include Weekends</h5>
-                                    <div class="help-description">
-                                        <p><strong>Purpose:</strong> Controls whether weekends count in your SLA calculation.</p>
-                                        <div class="help-options">
-                                            <div class="help-option enabled">
-                                                <span class="option-label">✅ Enabled (Default)</span>
-                                                <span class="option-desc">24/7 service - weekends included</span>
-                                            </div>
-                                            <div class="help-option disabled">
-                                                <span class="option-label">❌ Disabled</span>
-                                                <span class="option-desc">Business days only (Mon-Fri)</span>
-                                            </div>
-                                        </div>
-                                        <p class="help-use-case"><strong>💡 When to use:</strong> Disable for services that only operate during weekdays.</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="help-item">
-                                    <h5>⏰ Analyze Work Time Impact</h5>
-                                    <div class="help-description">
-                                        <p><strong>Purpose:</strong> Shows worst-case business impact if all downtime happens during work hours.</p>
-                                        <div class="impact-explanation">
-                                            <div class="impact-item">
-                                                <span class="impact-label">📊 SLA Calculation</span>
-                                                <span class="impact-desc">Always based on calendar time (industry standard)</span>
-                                            </div>
-                                            <div class="impact-item">
-                                                <span class="impact-label">🎯 Work Impact</span>
-                                                <span class="impact-desc">Shows availability if downtime hits work hours</span>
-                                            </div>
-                                        </div>
-                                        <p class="help-use-case"><strong>💡 When to use:</strong> Understanding business impact during active work periods.</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="help-item work-schedule-help">
-                                    <h5>🔧 Work Schedule Settings</h5>
-                                    <div class="help-description">
-                                        <p><strong>These settings only affect work impact analysis, not your base SLA calculation.</strong></p>
-                                        <div class="schedule-settings">
-                                            <div class="setting-item">
-                                                <span class="setting-label">📊 Work Hours per Week</span>
-                                                <span class="setting-desc">Total weekly hours (e.g., 40 for full-time)</span>
-                                            </div>
-                                            <div class="setting-item">
-                                                <span class="setting-label">🕐 Work Start Time</span>
-                                                <span class="setting-desc">When your team starts working each day</span>
-                                            </div>
-                                            <div class="setting-item">
-                                                <span class="setting-label">🕕 Work End Time</span>
-                                                <span class="setting-desc">When your team stops working each day</span>
-                                            </div>
-                                        </div>
-                                        <div class="schedule-note">
-                                            <strong>📌 Important:</strong> Work Start/End times help calculate the "Work Impact" percentage shown in results. They determine how much of your allowed downtime would affect productivity if it all happened during work hours.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="help-item">
-                                    <h5>📊 Calculation Methods</h5>
-                                    <div class="calculation-modes">
-                                        <div class="calc-mode">
-                                            <strong>Standard Mode:</strong>
-                                            <code>Allowed Downtime = (100% - SLA%) × Calendar Time</code>
-                                        </div>
-                                        <div class="calc-mode">
-                                            <strong>Weekdays Only:</strong>
-                                            <code>Allowed Downtime = (100% - SLA%) × (Calendar Time × 5/7)</code>
-                                        </div>
-                                        <div class="calc-mode">
-                                            <strong>Work Impact Analysis:</strong>
-                                            <code>Base SLA = Calendar Time Calculation<br>
-                                            Worst Case = Work Time - Calendar Downtime</code>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="help-example">
-                                    <h5>💡 Example</h5>
-                                    <p>For 99.9% SLA over 1 month:</p>
-                                    <ul>
-                                        <li><strong>Standard:</strong> 43.2 minutes downtime allowed</li>
-                                        <li><strong>Work Impact (40h/week):</strong> Same 43.2 minutes downtime, but shows impact if it all happens during work hours</li>
-                                        <li><strong>Weekend Excluded:</strong> 30.9 minutes downtime (weekdays only)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3>Advanced Settings</h3>
                     
                     <!-- Weekend Toggle -->
                     <div class="toggle-group">
@@ -160,7 +61,7 @@
                             <span class="toggle-slider" role="presentation"></span>
                             Include Weekends
                         </label>
-                        <div id="weekends-help" class="sr-only">Toggle to include or exclude weekends in SLA calculations</div>
+                        <div id="weekends-help" class="field-help">Include weekends in SLA calculations (24/7 service vs business days only)</div>
                     </div>
 
                     <!-- Work Time Impact Toggle -->
@@ -170,11 +71,12 @@
                             <span class="toggle-slider" role="presentation"></span>
                             Analyze Work Time Impact
                         </label>
-                        <div id="business-help" class="sr-only">Show worst-case impact of SLA downtime on work hours only (when everyone is working)</div>
+                        <div id="business-help" class="field-help">Show how downtime affects productivity during work hours</div>
                     </div>
 
                     <!-- Work Schedule Configuration -->
                     <div id="business-config" class="business-config" style="display: none;">
+                        <h4>Work Schedule Settings</h4>
                         <div class="input-group">
                             <label for="work-hours-per-week">Work Hours per Week</label>
                             <input type="number" id="work-hours-per-week" min="1" max="168" value="40" aria-describedby="work-hours-help">
@@ -289,19 +191,50 @@
 
             <!-- Always Visible Explanation Section -->
             <section class="explanation-section" aria-labelledby="explanation-heading">
-                <h2 id="explanation-heading">Understanding SLA Calculator Features</h2>
+                <h2 id="explanation-heading">Complete Guide to SLA Calculator Features</h2>
                 
-                <div class="explanation-card">
-                    <h3>🔧 Work Start & End Times</h3>
+                <!-- Core Concept Card -->
+                <div class="explanation-card primary-card">
+                    <h3>🎯 Understanding SLA Calculations</h3>
                     <div class="explanation-content">
-                        <p><strong>What they do:</strong> These settings help calculate how SLA downtime would impact your team's productivity if it all happened during work hours.</p>
+                        <p><strong>Service Level Agreements (SLAs)</strong> define the expected uptime for your service. This calculator helps you understand how much downtime is allowed and what it means for your operations.</p>
                         
-                        <div class="feature-explanation">
+                        <div class="key-points">
+                            <div class="key-point">
+                                <span class="point-icon">📊</span>
+                                <div class="point-content">
+                                    <strong>Industry Standard</strong>
+                                    <p>All SLA calculations are based on calendar time (24/7) as per industry standards</p>
+                                </div>
+                            </div>
+                            <div class="key-point">
+                                <span class="point-icon">⚡</span>
+                                <div class="point-content">
+                                    <strong>Common SLA Levels</strong>
+                                    <p>99.9% = 8h 45m/year • 99.95% = 4h 23m/year • 99.99% = 52m/year</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Time Impact Explanation -->
+                <div class="explanation-card feature-card">
+                    <h3>🔧 Work Start & End Times Explained</h3>
+                    <div class="explanation-content">
+                        <div class="important-note">
+                            <span class="note-icon">⚠️</span>
+                            <div class="note-content">
+                                <strong>Key Point:</strong> Work times don't change your allowed downtime. They help you understand the business impact if all downtime happens during work hours.
+                            </div>
+                        </div>
+
+                        <div class="explanation-points">
                             <div class="explanation-point">
                                 <span class="point-icon">📊</span>
                                 <div class="point-content">
                                     <strong>Your SLA calculation stays the same</strong>
-                                    <p>Work times don't change your allowed downtime - that's always based on calendar time (industry standard)</p>
+                                    <p>Allowed downtime is always calculated using calendar time (industry standard). Work times don't affect this.</p>
                                 </div>
                             </div>
                             
@@ -309,75 +242,192 @@
                                 <span class="point-icon">🎯</span>
                                 <div class="point-content">
                                     <strong>Shows "Work Impact" analysis</strong>
-                                    <p>When enabled, see worst-case availability if all downtime hits during work hours</p>
+                                    <p>When enabled, shows worst-case availability if all your allowed downtime occurred during work hours.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="examples-section">
-                            <h4>💡 Real Examples</h4>
+                            <h4>💡 Real-World Examples</h4>
                             <div class="example-scenarios">
-                                <div class="example-scenario">
+                                <div class="example-scenario office">
                                     <div class="scenario-header">
                                         <span class="scenario-icon">🏢</span>
                                         <strong>Standard Office (9 AM - 5 PM)</strong>
                                     </div>
                                     <div class="scenario-details">
-                                        <p>Set Work Start: 9:00 AM, Work End: 5:00 PM</p>
-                                        <p class="scenario-result">Result: See how 99.9% SLA (43 min downtime/month) affects an 8-hour workday</p>
+                                        <p><strong>Setup:</strong> Work Start: 9:00 AM, Work End: 5:00 PM</p>
+                                        <p><strong>Result:</strong> See how 99.9% SLA (43 min downtime/month) impacts an 8-hour workday</p>
+                                        <p><strong>Use case:</strong> Office applications, internal tools, customer support systems</p>
                                     </div>
                                 </div>
                                 
-                                <div class="example-scenario">
+                                <div class="example-scenario nightshift">
                                     <div class="scenario-header">
                                         <span class="scenario-icon">🌙</span>
-                                        <strong>Night Shift (11 PM - 7 AM)</strong>
+                                        <strong>Night Shift Operations (11 PM - 7 AM)</strong>
                                     </div>
                                     <div class="scenario-details">
-                                        <p>Set Work Start: 11:00 PM, Work End: 7:00 AM</p>
-                                        <p class="scenario-result">Result: Calculate impact for overnight operations</p>
+                                        <p><strong>Setup:</strong> Work Start: 11:00 PM, Work End: 7:00 AM</p>
+                                        <p><strong>Result:</strong> Calculate impact for overnight operations and manufacturing</p>
+                                        <p><strong>Use case:</strong> Manufacturing, security systems, overnight call centers</p>
                                     </div>
                                 </div>
                                 
-                                <div class="example-scenario">
+                                <div class="example-scenario critical">
                                     <div class="scenario-header">
                                         <span class="scenario-icon">⚡</span>
                                         <strong>24/7 Critical Systems</strong>
                                     </div>
                                     <div class="scenario-details">
-                                        <p>Don't enable "Analyze Work Time Impact"</p>
-                                        <p class="scenario-result">Result: Focus on pure SLA metrics without work hour analysis</p>
+                                        <p><strong>Setup:</strong> Don't enable "Analyze Work Time Impact"</p>
+                                        <p><strong>Result:</strong> Focus on pure SLA metrics without work hour analysis</p>
+                                        <p><strong>Use case:</strong> Healthcare systems, emergency services, global web services</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="calculation-note">
-                            <div class="note-icon">ℹ️</div>
-                            <div class="note-content">
+                        <div class="how-it-works">
+                            <div class="how-icon">ℹ️</div>
+                            <div class="how-content">
                                 <strong>How it works:</strong> The calculator takes your allowed downtime (based on calendar time) and shows what your effective availability would be if that downtime occurred during your specified work hours.
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="explanation-card">
-                    <h3>📅 Other Features Explained</h3>
+                <!-- Advanced Features Explained -->
+                <div class="explanation-card advanced-card">
+                    <h3>⚙️ Advanced Features Guide</h3>
                     <div class="explanation-content">
-                        <div class="feature-grid">
+                        <div class="advanced-features">
                             <div class="feature-item">
-                                <span class="feature-icon">🗓️</span>
-                                <div class="feature-details">
+                                <div class="feature-header">
+                                    <span class="feature-icon">📅</span>
                                     <strong>Include Weekends</strong>
-                                    <p>Toggle between 24/7 service (weekends included) vs business days only (Mon-Fri)</p>
+                                </div>
+                                <div class="feature-content">
+                                    <p><strong>Purpose:</strong> Controls whether weekends count in your SLA calculation.</p>
+                                    <div class="feature-options">
+                                        <div class="option enabled">
+                                            <span class="option-indicator">✅</span>
+                                            <div class="option-details">
+                                                <strong>Enabled (Default)</strong>
+                                                <p>24/7 service - weekends included in calculations</p>
+                                            </div>
+                                        </div>
+                                        <div class="option disabled">
+                                            <span class="option-indicator">❌</span>
+                                            <div class="option-details">
+                                                <strong>Disabled</strong>
+                                                <p>Business days only (Mon-Fri) - reduces allowed downtime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="use-case">
+                                        <strong>💡 When to use:</strong> Disable for services that only operate during weekdays (internal tools, office applications).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-header">
+                                    <span class="feature-icon">⏰</span>
+                                    <strong>Analyze Work Time Impact</strong>
+                                </div>
+                                <div class="feature-content">
+                                    <p><strong>Purpose:</strong> Shows worst-case business impact if all downtime happens during work hours.</p>
+                                    <div class="impact-breakdown">
+                                        <div class="impact-item">
+                                            <span class="impact-label">📊 SLA Calculation</span>
+                                            <span class="impact-desc">Always based on calendar time (industry standard)</span>
+                                        </div>
+                                        <div class="impact-item">
+                                            <span class="impact-label">🎯 Work Impact</span>
+                                            <span class="impact-desc">Shows availability if downtime hits work hours</span>
+                                        </div>
+                                    </div>
+                                    <div class="use-case">
+                                        <strong>💡 When to use:</strong> Understanding business impact during active work periods, planning maintenance windows.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-header">
+                                    <span class="feature-icon">⚡</span>
+                                    <strong>Work Hours per Week</strong>
+                                </div>
+                                <div class="feature-content">
+                                    <p><strong>Purpose:</strong> Set total weekly hours for accurate work impact calculations.</p>
+                                    <div class="examples-list">
+                                        <span><strong>40 hours:</strong> Full-time standard office</span>
+                                        <span><strong>50 hours:</strong> Extended office hours</span>
+                                        <span><strong>20 hours:</strong> Part-time operations</span>
+                                        <span><strong>168 hours:</strong> 24/7 operations</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculation Methods -->
+                <div class="explanation-card technical-card">
+                    <h3>📊 Calculation Methods</h3>
+                    <div class="explanation-content">
+                        <div class="calculation-methods">
+                            <div class="calc-method">
+                                <div class="method-header">
+                                    <strong>Standard Mode (Default)</strong>
+                                </div>
+                                <div class="method-formula">
+                                    <code>Allowed Downtime = (100% - SLA%) × Calendar Time</code>
+                                </div>
+                                <div class="method-description">
+                                    24/7 calculation including all hours and weekends
                                 </div>
                             </div>
                             
-                            <div class="feature-item">
-                                <span class="feature-icon">⏱️</span>
-                                <div class="feature-details">
-                                    <strong>Work Hours per Week</strong>
-                                    <p>Set total weekly hours (40 for full-time, 20 for part-time) to calculate work impact</p>
+                            <div class="calc-method">
+                                <div class="method-header">
+                                    <strong>Weekdays Only Mode</strong>
+                                </div>
+                                <div class="method-formula">
+                                    <code>Allowed Downtime = (100% - SLA%) × (Calendar Time × 5/7)</code>
+                                </div>
+                                <div class="method-description">
+                                    Business days only (Monday through Friday)
+                                </div>
+                            </div>
+                            
+                            <div class="calc-method">
+                                <div class="method-header">
+                                    <strong>Work Impact Analysis</strong>
+                                </div>
+                                <div class="method-formula">
+                                    <code>Base SLA = Calendar Time Calculation<br>
+                                    Work Impact = (Work Time - Calendar Downtime) / Work Time</code>
+                                </div>
+                                <div class="method-description">
+                                    Shows worst-case scenario where all downtime affects work hours
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practical-example">
+                            <h4>📈 Practical Example</h4>
+                            <p><strong>For 99.9% SLA over 1 month:</strong></p>
+                            <div class="example-results">
+                                <div class="result-item">
+                                    <strong>Standard:</strong> 43.2 minutes downtime allowed
+                                </div>
+                                <div class="result-item">
+                                    <strong>Work Impact (40h/week):</strong> Same 43.2 minutes downtime, but shows impact if it all happens during work hours
+                                </div>
+                                <div class="result-item">
+                                    <strong>Weekend Excluded:</strong> 30.9 minutes downtime (weekdays only)
                                 </div>
                             </div>
                         </div>
