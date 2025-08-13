@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Advanced options elements
     const showAdvancedToggle = document.getElementById('show-advanced');
     const advancedOptions = document.getElementById('advanced-options');
+    const showHelpToggle = document.getElementById('show-help');
+    const helpContent = document.getElementById('help-content');
     const includeWeekendsToggle = document.getElementById('include-weekends');
     const businessHoursToggle = document.getElementById('business-hours');
     const businessConfig = document.getElementById('business-config');
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Advanced options event listeners
     showAdvancedToggle.addEventListener('change', toggleAdvancedOptions);
+    showHelpToggle.addEventListener('change', toggleHelp);
     includeWeekendsToggle.addEventListener('change', function() {
         saveSettings();
         updateResults();
@@ -60,6 +63,15 @@ document.addEventListener('DOMContentLoaded', function() {
             advancedOptions.style.display = 'block';
         } else {
             advancedOptions.style.display = 'none';
+        }
+        saveSettings();
+    }
+    
+    function toggleHelp() {
+        if (showHelpToggle.checked) {
+            helpContent.style.display = 'block';
+        } else {
+            helpContent.style.display = 'none';
         }
         saveSettings();
     }
@@ -131,6 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     showAdvancedToggle.checked = true;
                     toggleAdvancedOptions();
                 }
+                if (parsed.showHelp) {
+                    showHelpToggle.checked = true;
+                    toggleHelp();
+                }
                 if (parsed.includeWeekends !== undefined) {
                     includeWeekendsToggle.checked = parsed.includeWeekends;
                 }
@@ -157,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const settings = {
                 showAdvanced: showAdvancedToggle.checked,
+                showHelp: showHelpToggle.checked,
                 includeWeekends: includeWeekendsToggle.checked,
                 businessHours: businessHoursToggle.checked,
                 workHoursPerWeek: parseInt(workHoursPerWeekInput.value),
