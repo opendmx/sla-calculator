@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const workAvailability = result.workAvailabilityPercentage.toFixed(2);
                 downtimeResults[period].innerHTML = `
                     <div>${result.formattedDowntime}</div>
-                    <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                    <div class="work-impact">
                         Work Impact: ${workAvailability}% available
                     </div>
                 `;
