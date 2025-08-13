@@ -224,7 +224,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function displayResults(allResults) {
         Object.keys(allResults).forEach(period => {
-            downtimeResults[period].textContent = allResults[period].formattedDowntime;
+            const result = allResults[period];
+            
+            if (result.isWorkImpactAnalysis) {
+                // Show work impact analysis with availability percentage
+                const workAvailability = result.workAvailabilityPercentage.toFixed(2);
+                downtimeResults[period].innerHTML = `
+                    <div>${result.formattedDowntime}</div>
+                    <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                        Work Impact: ${workAvailability}% available
+                    </div>
+                `;
+            } else {
+                // Standard display
+                downtimeResults[period].textContent = result.formattedDowntime;
+            }
         });
     }
 });
