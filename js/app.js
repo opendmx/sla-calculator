@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Advanced options elements
     const showAdvancedToggle = document.getElementById('show-advanced');
     const advancedOptions = document.getElementById('advanced-options');
+    const showHelpToggle = document.getElementById('show-help');
+    const helpContent = document.getElementById('help-content');
     const includeWeekendsToggle = document.getElementById('include-weekends');
     const businessHoursToggle = document.getElementById('business-hours');
     const businessConfig = document.getElementById('business-config');
@@ -37,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Advanced options event listeners
     showAdvancedToggle.addEventListener('change', toggleAdvancedOptions);
+    showHelpToggle.addEventListener('change', toggleHelp);
     includeWeekendsToggle.addEventListener('change', function() {
         saveSettings();
         updateResults();
@@ -64,6 +67,15 @@ document.addEventListener('DOMContentLoaded', function() {
             advancedOptions.style.display = 'block';
         } else {
             advancedOptions.style.display = 'none';
+        }
+        saveSettings();
+    }
+    
+    function toggleHelp() {
+        if (showHelpToggle.checked) {
+            helpContent.style.display = 'block';
+        } else {
+            helpContent.style.display = 'none';
         }
         saveSettings();
     }
@@ -131,6 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     showAdvancedToggle.checked = true;
                     toggleAdvancedOptions();
                 }
+                if (parsed.showHelp) {
+                    showHelpToggle.checked = true;
+                    toggleHelp();
+                }
                 if (parsed.includeWeekends !== undefined) {
                     includeWeekendsToggle.checked = parsed.includeWeekends;
                 }
@@ -157,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const settings = {
                 showAdvanced: showAdvancedToggle.checked,
+                showHelp: showHelpToggle.checked,
                 includeWeekends: includeWeekendsToggle.checked,
                 businessHours: businessHoursToggle.checked,
                 workHoursPerWeek: parseInt(workHoursPerWeekInput.value),
@@ -225,26 +242,27 @@ function calculateSLA(uptimePercentage, timePeriod, timeConfig = {}) {
     
     // When analyzing work impact, we need to show the results in work context
     if (periodData.configuration.analyzeWorkImpact && periodData.workMinutes) {
-        // The downtime is still the same absolute amount
-        // But we present uptime in context of work hours to show impact
-        const workUptimeMinutes = periodData.workMinutes - allowedDowntimeMinutes;
+        // The downtime is still the same absolute amount based on calendar time
+        // For work impact analysis, we show the worst-case scenario where all downtime occurs during work hours
         
-        // Format the results with work context
+        // Format the results - uptime remains calendar-based, downtime shows absolute amount
         const formattedDowntime = formatTime(allowedDowntimeMinutes);
-        const formattedWorkUptime = formatTime(Math.max(0, workUptimeMinutes));
+        const formattedUptime = formatTime(uptimeMinutes); // Use calendar uptime, not work uptime
         
-        // Calculate the effective availability during work hours
-        const workAvailabilityPercentage = Math.max(0, (workUptimeMinutes / periodData.workMinutes) * 100);
+        // Calculate the worst-case availability during work hours
+        // This shows what happens if all downtime occurs during work hours
+        const worstCaseWorkUptimeMinutes = Math.max(0, periodData.workMinutes - allowedDowntimeMinutes);
+        const workAvailabilityPercentage = Math.max(0, (worstCaseWorkUptimeMinutes / periodData.workMinutes) * 100);
         
         return {
             slaPercentage: uptimePercentage,
             timePeriod: timePeriod,
             allowedDowntimeMinutes: allowedDowntimeMinutes,
             uptimeMinutes: uptimeMinutes,
-            workUptimeMinutes: workUptimeMinutes,
+            workUptimeMinutes: worstCaseWorkUptimeMinutes,
             workAvailabilityPercentage: workAvailabilityPercentage,
             formattedDowntime: formattedDowntime,
-            formattedUptime: formattedWorkUptime,
+            formattedUptime: formattedUptime,
             periodData: periodData,
             timeConfig: timeConfig,
             isWorkImpactAnalysis: true
