@@ -54,47 +54,71 @@
                 <div id="advanced-options" class="advanced-options" style="display: none;">
                     <h3>Time Configuration</h3>
                     
-                    <!-- Help Section -->
+                    <!-- Help Section - Always Visible -->
                     <div class="help-section">
-                        <div class="toggle-group">
-                            <label class="toggle-label" for="show-help">
-                                <input type="checkbox" id="show-help" class="toggle-input">
-                                <span class="toggle-slider" role="presentation"></span>
-                                Show Help & Explanation
-                            </label>
-                        </div>
-                        
-                        <div id="help-content" class="help-content" style="display: none;">
+                        <div id="help-content" class="help-content">
                             <div class="help-card">
-                                <h4>How Advanced Options Work</h4>
-                                <p>These options modify how SLA calculations are performed to match different operational scenarios.</p>
+                                <h4>🔍 How These Options Work</h4>
+                                <p class="help-intro">These advanced settings help you understand SLA impact in different operational scenarios. All calculations follow industry standards.</p>
                                 
                                 <div class="help-item">
                                     <h5>📅 Include Weekends</h5>
-                                    <p><strong>What it does:</strong> Controls whether weekends are included in the calculation baseline.</p>
-                                    <ul>
-                                        <li><strong>Enabled (default):</strong> Calculates against full calendar time (24/7)</li>
-                                        <li><strong>Disabled:</strong> Calculates against weekdays only (5/7 of calendar time)</li>
-                                    </ul>
-                                    <p><strong>Use case:</strong> Disable for services that only operate on weekdays.</p>
+                                    <div class="help-description">
+                                        <p><strong>Purpose:</strong> Controls whether weekends count in your SLA calculation.</p>
+                                        <div class="help-options">
+                                            <div class="help-option enabled">
+                                                <span class="option-label">✅ Enabled (Default)</span>
+                                                <span class="option-desc">24/7 service - weekends included</span>
+                                            </div>
+                                            <div class="help-option disabled">
+                                                <span class="option-label">❌ Disabled</span>
+                                                <span class="option-desc">Business days only (Mon-Fri)</span>
+                                            </div>
+                                        </div>
+                                        <p class="help-use-case"><strong>💡 When to use:</strong> Disable for services that only operate during weekdays.</p>
+                                    </div>
                                 </div>
                                 
                                 <div class="help-item">
                                     <h5>⏰ Analyze Work Time Impact</h5>
-                                    <p><strong>What it does:</strong> Shows the worst-case impact of downtime specifically on work hours.</p>
-                                    <ul>
-                                        <li><strong>SLA calculation:</strong> Still based on calendar time (industry standard)</li>
-                                        <li><strong>Impact analysis:</strong> Shows what happens if all downtime occurs during work hours</li>
-                                        <li><strong>Availability:</strong> Displays calendar SLA percentage with "(calendar)" label</li>
-                                    </ul>
-                                    <p><strong>Use case:</strong> Understanding business impact when your team/users are actively working.</p>
+                                    <div class="help-description">
+                                        <p><strong>Purpose:</strong> Shows worst-case business impact if all downtime happens during work hours.</p>
+                                        <div class="impact-explanation">
+                                            <div class="impact-item">
+                                                <span class="impact-label">📊 SLA Calculation</span>
+                                                <span class="impact-desc">Always based on calendar time (industry standard)</span>
+                                            </div>
+                                            <div class="impact-item">
+                                                <span class="impact-label">🎯 Work Impact</span>
+                                                <span class="impact-desc">Shows availability if downtime hits work hours</span>
+                                            </div>
+                                        </div>
+                                        <p class="help-use-case"><strong>💡 When to use:</strong> Understanding business impact during active work periods.</p>
+                                    </div>
                                 </div>
                                 
-                                <div class="help-item">
-                                    <h5>🔧 Work Schedule Configuration</h5>
-                                    <p><strong>Work Hours per Week:</strong> Total weekly work hours for impact analysis (1-168 hours).</p>
-                                    <p><strong>Start/End Hours:</strong> Daily work schedule used to calculate work time periods.</p>
-                                    <p><strong>Note:</strong> These settings only affect the work impact analysis, not the base SLA calculation.</p>
+                                <div class="help-item work-schedule-help">
+                                    <h5>🔧 Work Schedule Settings</h5>
+                                    <div class="help-description">
+                                        <p><strong>These settings only affect work impact analysis, not your base SLA calculation.</strong></p>
+                                        <div class="schedule-settings">
+                                            <div class="setting-item">
+                                                <span class="setting-label">📊 Work Hours per Week</span>
+                                                <span class="setting-desc">Total weekly hours (e.g., 40 for full-time)</span>
+                                            </div>
+                                            <div class="setting-item">
+                                                <span class="setting-label">🕐 Work Start Time</span>
+                                                <span class="setting-desc">When your team starts working each day</span>
+                                            </div>
+                                            <div class="setting-item">
+                                                <span class="setting-label">🕕 Work End Time</span>
+                                                <span class="setting-desc">When your team stops working each day</span>
+                                            </div>
+                                        </div>
+                                        <div class="schedule-note">
+                                            <strong>📌 Important:</strong> Work Start/End times help calculate the "Work Impact" percentage shown in results. They determine how much of your allowed downtime would affect productivity if it all happened during work hours.
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="help-item">
@@ -154,11 +178,11 @@
                         <div class="input-group">
                             <label for="work-hours-per-week">Work Hours per Week</label>
                             <input type="number" id="work-hours-per-week" min="1" max="168" value="40" aria-describedby="work-hours-help">
-                            <div id="work-hours-help" class="sr-only">Number of work hours per week for impact analysis (default: 40)</div>
+                            <div id="work-hours-help" class="field-help">Total weekly work hours (e.g., 40 for full-time, 20 for part-time)</div>
                         </div>
                         
                         <div class="input-group">
-                            <label for="work-start-hour">Work Start Hour</label>
+                            <label for="work-start-hour">Work Start Time</label>
                             <select id="work-start-hour" aria-describedby="start-hour-help">
                                 <option value="0">12:00 AM</option>
                                 <option value="1">1:00 AM</option>
@@ -185,11 +209,11 @@
                                 <option value="22">10:00 PM</option>
                                 <option value="23">11:00 PM</option>
                             </select>
-                            <div id="start-hour-help" class="sr-only">Work day start hour</div>
+                            <div id="start-hour-help" class="field-help">When your team/users start working each day</div>
                         </div>
                         
                         <div class="input-group">
-                            <label for="work-end-hour">Work End Hour</label>
+                            <label for="work-end-hour">Work End Time</label>
                             <select id="work-end-hour" aria-describedby="end-hour-help">
                                 <option value="1">1:00 AM</option>
                                 <option value="2">2:00 AM</option>
@@ -216,7 +240,7 @@
                                 <option value="23">11:00 PM</option>
                                 <option value="0">12:00 AM</option>
                             </select>
-                            <div id="end-hour-help" class="sr-only">Work day end hour</div>
+                            <div id="end-hour-help" class="field-help">When your team/users stop working each day</div>
                         </div>
                     </div>
                 </div>
