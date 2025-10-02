@@ -510,6 +510,8 @@ You can share specific configurations using URL parameters:
 
 **Examples**:
 
+> **Note**: URL parameters always use period (.) for decimal numbers (e.g., 99.9, 99.95) as this is the standard technical format for URLs.
+
 ```
 # Simple SLA preset
 https://your-domain.com/?sla=99.95
