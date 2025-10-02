@@ -525,7 +525,7 @@ https://ihre-domain.com/?sla=99.95&business=true&workHours=50&workStart=8&workEn
 ```
 
 **Unterstützte Parameter**:
-- `sla`: SLA-Prozentsatz (z.B. 99.9, 99.95)
+- `sla`: SLA-Prozentsatz (z.B. 99,9, 99,95)
 - `business`: Arbeitszeitauswirkung aktivieren (true/false)
 - `workHours`: Arbeitsstunden pro Woche (1-168)
 - `workStart`: Arbeitsbeginnstunde (0-23)

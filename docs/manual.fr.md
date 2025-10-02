@@ -525,7 +525,7 @@ https://votre-domaine.com/?sla=99.95&business=true&workHours=50&workStart=8&work
 ```
 
 **Paramètres pris en charge** :
-- `sla` : Pourcentage SLA (par exemple, 99.9, 99.95)
+- `sla` : Pourcentage SLA (par exemple, 99,9, 99,95)
 - `business` : Activer l'impact sur le temps de travail (true/false)
 - `workHours` : Heures de travail par semaine (1-168)
 - `workStart` : Heure de début de travail (0-23)
