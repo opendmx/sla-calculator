@@ -510,6 +510,8 @@ Sie können spezifische Konfigurationen mit URL-Parametern teilen:
 
 **Beispiele**:
 
+> **Hinweis**: In URL-Parametern müssen Dezimalzahlen mit Punkt (.) statt Komma geschrieben werden (z.B. 99.9 statt 99,9), da dies das technische Format für URLs ist.
+
 ```
 # Einfache SLA-Voreinstellung
 https://ihre-domain.com/?sla=99.95

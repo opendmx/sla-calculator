@@ -510,6 +510,8 @@ Vous pouvez partager des configurations spécifiques en utilisant des paramètre
 
 **Exemples** :
 
+> **Remarque** : Dans les paramètres URL, les nombres décimaux doivent utiliser le point (.) au lieu de la virgule (par exemple, 99.9 au lieu de 99,9), car c'est le format technique pour les URLs.
+
 ```
 # Préréglage SLA simple
 https://votre-domaine.com/?sla=99.95
