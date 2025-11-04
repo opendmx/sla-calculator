@@ -4,12 +4,13 @@ A simple, web-based Service Level Agreement (SLA) calculator that helps you calc
 
 ## Features
 
+- **SLA Comparison Mode**: Compare up to 3 different SLA targets side by side in a clear table format
 - **Real-time calculations**: Automatic updates as you change inputs
 - **Multiple time periods**: Support for minute, hour, day, week, month, quarter, and year intervals
 - **Advanced time configuration**: Choose between calendar time, weekdays only, or business hours
 - **Weekend inclusion/exclusion**: Toggle weekend consideration in calculations
 - **Business hours support**: Configure work schedules with custom hours and workweek length
-- **URL parameter support**: Prefill SLA values and configuration via URL parameters
+- **URL parameter support**: Prefill SLA values and configuration via URL parameters (including comparison mode)
 - **Settings persistence**: Automatically save and restore your configuration preferences
 - **Clean, modern interface**: Responsive design that works on desktop and mobile
 - **Comprehensive breakdown**: Shows allowed downtime, required uptime, and availability percentage
@@ -20,7 +21,7 @@ A simple, web-based Service Level Agreement (SLA) calculator that helps you calc
 
 1. **Open the calculator**: Navigate to `index.html` in your web browser or visit the deployed URL
 2. **Set SLA Target**: Enter your desired SLA percentage (e.g., 99.9, 99.99, 99.999)
-3. **Select Time Period**: Choose from:
+3. **View Results**: The calculator automatically displays allowed downtime across all time periods:
    - Per Minute
    - Per Hour  
    - Daily
@@ -28,10 +29,21 @@ A simple, web-based Service Level Agreement (SLA) calculator that helps you calc
    - Monthly
    - Quarterly
    - Yearly
-4. **View Results**: The calculator automatically displays:
-   - **Allowed Downtime**: Maximum downtime permitted for your SLA
-   - **Uptime Required**: Minimum uptime needed to meet SLA
-   - **Availability**: Your SLA percentage
+
+### Comparison Mode
+
+Compare up to 3 different SLA targets side by side:
+
+1. **Enable Comparison Mode**: Toggle "Compare Multiple SLAs" at the top of Calculator Settings
+2. **Enter SLA Values**: Input up to 3 different SLA percentages (default: 99.9%, 99.95%, 99.99%)
+3. **View Comparison Table**: See all SLA downtimes side by side in an easy-to-read table format
+4. **URL Support**: Share comparisons using URL parameters like `?sla1=99.5&sla2=99.9&sla3=99.99`
+
+**Use Cases for Comparison Mode:**
+- Compare different service tier SLAs (Basic, Premium, Enterprise)
+- Evaluate cost vs. reliability tradeoffs
+- Present multiple SLA options to stakeholders
+- Understand the impact of incremental SLA improvements
 
 ### URL Parameters
 
@@ -39,8 +51,11 @@ You can prefill configuration settings using URL parameters:
 
 #### Basic Parameters
 ```
+# Single SLA mode
 https://your-domain.com/?sla=99.95
-https://your-domain.com/?sla=99.9&period=year
+
+# Comparison mode - compare up to 3 SLAs
+https://your-domain.com/?sla1=99.5&sla2=99.9&sla3=99.99
 ```
 
 #### Advanced Configuration Parameters
@@ -52,12 +67,18 @@ https://your-domain.com/?sla=99.99&business=true&workHours=50
 https://your-domain.com/?sla=99.9&weekends=false
 
 # Complete configuration
-https://your-domain.com/?sla=99.95&period=year&weekends=true&business=true&workHours=40&startHour=9&endHour=17
+https://your-domain.com/?sla=99.95&weekends=true&business=true&workHours=40&startHour=9&endHour=17
+
+# Comparison mode with 2 SLAs
+https://your-domain.com/?sla1=99.9&sla2=99.99
+
+# Comparison mode with custom configuration
+https://your-domain.com/?sla1=99.5&sla2=99.9&sla3=99.99&weekends=false
 ```
 
 #### Supported Parameters
-- `sla`: SLA percentage (0-100)
-- `period`: Time period (`minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`)
+- `sla`: SLA percentage (0-100) - single mode
+- `sla1`, `sla2`, `sla3`: SLA percentages for comparison mode (0-100)
 - `weekends`: Include weekends (`true`, `false`)
 - `business`: Business hours mode (`true`, `false`)
 - `workHours`: Work hours per week (1-168)
