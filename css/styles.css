@@ -412,7 +412,7 @@ section h2 {
 }
 
 .comparison-table td.comparison-value {
-    font-family: 'Inter', monospace;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-variant-numeric: tabular-nums;
     font-weight: 600;
     color: #374151;

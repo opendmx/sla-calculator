@@ -282,45 +282,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateComparisonResults(timeConfig) {
-        const sla1 = parseFloat(slaTarget1Input.value);
-        const sla2 = parseFloat(slaTarget2Input.value);
-        const sla3 = parseFloat(slaTarget3Input.value);
+        const slaValues = [
+            parseFloat(slaTarget1Input.value),
+            parseFloat(slaTarget2Input.value),
+            parseFloat(slaTarget3Input.value)
+        ];
         
         const timePeriods = ['minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
         
-        // Update header values
-        document.querySelector('#sla-header-1 .sla-value').textContent = 
-            (!isNaN(sla1) && sla1 >= 0 && sla1 <= 100) ? sla1 + '%' : '--';
-        document.querySelector('#sla-header-2 .sla-value').textContent = 
-            (!isNaN(sla2) && sla2 >= 0 && sla2 <= 100) ? sla2 + '%' : '--';
-        document.querySelector('#sla-header-3 .sla-value').textContent = 
-            (!isNaN(sla3) && sla3 >= 0 && sla3 <= 100) ? sla3 + '%' : '--';
+        // Helper function to validate and format SLA value
+        function isValidSLA(sla) {
+            return !isNaN(sla) && sla >= 0 && sla <= 100;
+        }
         
-        // Calculate and display results for each SLA
+        // Update header values
+        slaValues.forEach((sla, index) => {
+            const headerElement = document.querySelector(`#sla-header-${index + 1} .sla-value`);
+            headerElement.textContent = isValidSLA(sla) ? sla + '%' : '--';
+        });
+        
+        // Calculate and display results for each SLA and time period
         timePeriods.forEach(period => {
-            // SLA 1
-            if (!isNaN(sla1) && sla1 >= 0 && sla1 <= 100) {
-                const result1 = calculateSLA(sla1, period, timeConfig);
-                document.getElementById(`compare-${period}-1`).textContent = result1.formattedDowntime;
-            } else {
-                document.getElementById(`compare-${period}-1`).textContent = '--';
-            }
-            
-            // SLA 2
-            if (!isNaN(sla2) && sla2 >= 0 && sla2 <= 100) {
-                const result2 = calculateSLA(sla2, period, timeConfig);
-                document.getElementById(`compare-${period}-2`).textContent = result2.formattedDowntime;
-            } else {
-                document.getElementById(`compare-${period}-2`).textContent = '--';
-            }
-            
-            // SLA 3
-            if (!isNaN(sla3) && sla3 >= 0 && sla3 <= 100) {
-                const result3 = calculateSLA(sla3, period, timeConfig);
-                document.getElementById(`compare-${period}-3`).textContent = result3.formattedDowntime;
-            } else {
-                document.getElementById(`compare-${period}-3`).textContent = '--';
-            }
+            slaValues.forEach((sla, index) => {
+                const cellId = `compare-${period}-${index + 1}`;
+                const cell = document.getElementById(cellId);
+                
+                if (isValidSLA(sla)) {
+                    const result = calculateSLA(sla, period, timeConfig);
+                    cell.textContent = result.formattedDowntime;
+                } else {
+                    cell.textContent = '--';
+                }
+            });
         });
     }
     
