@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('SLA Calculator loaded');
     
-    // Get DOM elements
+    // Get DOM elements - Single mode
     const slaTargetInput = document.getElementById('sla-target');
     const downtimeResults = {
         minute: document.getElementById('downtime-minute'),
@@ -14,6 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
         quarter: document.getElementById('downtime-quarter'),
         year: document.getElementById('downtime-year')
     };
+    
+    // Comparison mode elements
+    const comparisonModeToggle = document.getElementById('comparison-mode');
+    const singleSlaMode = document.getElementById('single-sla-mode');
+    const comparisonSlaMode = document.getElementById('comparison-sla-mode');
+    const singleResults = document.getElementById('single-results');
+    const comparisonResults = document.getElementById('comparison-results');
+    
+    const slaTarget1Input = document.getElementById('sla-target-1');
+    const slaTarget2Input = document.getElementById('sla-target-2');
+    const slaTarget3Input = document.getElementById('sla-target-3');
     
     // Advanced options elements
     const showAdvancedToggle = document.getElementById('show-advanced');
@@ -34,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add event listeners for real-time updates
     slaTargetInput.addEventListener('input', updateResults);
+    
+    // Comparison mode listeners
+    comparisonModeToggle.addEventListener('change', toggleComparisonMode);
+    slaTarget1Input.addEventListener('input', updateResults);
+    slaTarget2Input.addEventListener('input', updateResults);
+    slaTarget3Input.addEventListener('input', updateResults);
     
     // Advanced options event listeners
     showAdvancedToggle.addEventListener('change', toggleAdvancedOptions);
@@ -59,6 +76,24 @@ document.addEventListener('DOMContentLoaded', function() {
         updateResults();
     });
     
+    function toggleComparisonMode() {
+        if (comparisonModeToggle.checked) {
+            // Switch to comparison mode
+            singleSlaMode.style.display = 'none';
+            comparisonSlaMode.style.display = 'block';
+            singleResults.style.display = 'none';
+            comparisonResults.style.display = 'block';
+        } else {
+            // Switch to single mode
+            singleSlaMode.style.display = 'block';
+            comparisonSlaMode.style.display = 'none';
+            singleResults.style.display = 'grid';
+            comparisonResults.style.display = 'none';
+        }
+        saveSettings();
+        updateResults();
+    }
+    
     function toggleAdvancedOptions() {
         if (showAdvancedToggle.checked) {
             advancedOptions.style.display = 'block';
@@ -78,9 +113,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function parseURLParameters() {
         const urlParams = new URLSearchParams(window.location.search);
+        
+        // Check for single SLA parameter (legacy support)
         const slaParam = urlParams.get('sla');
         
-        if (slaParam) {
+        // Check for comparison mode parameters
+        const sla1Param = urlParams.get('sla1');
+        const sla2Param = urlParams.get('sla2');
+        const sla3Param = urlParams.get('sla3');
+        
+        // If any comparison parameters exist, enable comparison mode
+        if (sla1Param || sla2Param || sla3Param) {
+            comparisonModeToggle.checked = true;
+            toggleComparisonMode();
+            
+            if (sla1Param) {
+                const slaValue = parseFloat(sla1Param);
+                if (slaValue >= 0 && slaValue <= 100) {
+                    slaTarget1Input.value = slaValue;
+                }
+            }
+            if (sla2Param) {
+                const slaValue = parseFloat(sla2Param);
+                if (slaValue >= 0 && slaValue <= 100) {
+                    slaTarget2Input.value = slaValue;
+                }
+            }
+            if (sla3Param) {
+                const slaValue = parseFloat(sla3Param);
+                if (slaValue >= 0 && slaValue <= 100) {
+                    slaTarget3Input.value = slaValue;
+                }
+            }
+        } else if (slaParam) {
+            // Legacy single SLA parameter
             const slaValue = parseFloat(slaParam);
             if (slaValue >= 0 && slaValue <= 100) {
                 slaTargetInput.value = slaValue;
@@ -127,6 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (settings) {
                 const parsed = JSON.parse(settings);
                 
+                if (parsed.comparisonMode) {
+                    comparisonModeToggle.checked = true;
+                    toggleComparisonMode();
+                }
                 if (parsed.showAdvanced) {
                     showAdvancedToggle.checked = true;
                     toggleAdvancedOptions();
@@ -156,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveSettings() {
         try {
             const settings = {
+                comparisonMode: comparisonModeToggle.checked,
                 showAdvanced: showAdvancedToggle.checked,
                 includeWeekends: includeWeekendsToggle.checked,
                 businessHours: businessHoursToggle.checked,
@@ -180,8 +251,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateResults() {
-        const slaPercentage = parseFloat(slaTargetInput.value);
         const timeConfig = getTimeConfiguration();
+        
+        if (comparisonModeToggle.checked) {
+            // Comparison mode
+            updateComparisonResults(timeConfig);
+        } else {
+            // Single mode
+            updateSingleResults(timeConfig);
+        }
+    }
+    
+    function updateSingleResults(timeConfig) {
+        const slaPercentage = parseFloat(slaTargetInput.value);
         
         if (isNaN(slaPercentage) || slaPercentage < 0 || slaPercentage > 100) {
             displayError();
@@ -197,6 +279,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         displayResults(allResults);
+    }
+    
+    function updateComparisonResults(timeConfig) {
+        const sla1 = parseFloat(slaTarget1Input.value);
+        const sla2 = parseFloat(slaTarget2Input.value);
+        const sla3 = parseFloat(slaTarget3Input.value);
+        
+        const timePeriods = ['minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
+        
+        // Update header values
+        document.querySelector('#sla-header-1 .sla-value').textContent = 
+            (!isNaN(sla1) && sla1 >= 0 && sla1 <= 100) ? sla1 + '%' : '--';
+        document.querySelector('#sla-header-2 .sla-value').textContent = 
+            (!isNaN(sla2) && sla2 >= 0 && sla2 <= 100) ? sla2 + '%' : '--';
+        document.querySelector('#sla-header-3 .sla-value').textContent = 
+            (!isNaN(sla3) && sla3 >= 0 && sla3 <= 100) ? sla3 + '%' : '--';
+        
+        // Calculate and display results for each SLA
+        timePeriods.forEach(period => {
+            // SLA 1
+            if (!isNaN(sla1) && sla1 >= 0 && sla1 <= 100) {
+                const result1 = calculateSLA(sla1, period, timeConfig);
+                document.getElementById(`compare-${period}-1`).textContent = result1.formattedDowntime;
+            } else {
+                document.getElementById(`compare-${period}-1`).textContent = '--';
+            }
+            
+            // SLA 2
+            if (!isNaN(sla2) && sla2 >= 0 && sla2 <= 100) {
+                const result2 = calculateSLA(sla2, period, timeConfig);
+                document.getElementById(`compare-${period}-2`).textContent = result2.formattedDowntime;
+            } else {
+                document.getElementById(`compare-${period}-2`).textContent = '--';
+            }
+            
+            // SLA 3
+            if (!isNaN(sla3) && sla3 >= 0 && sla3 <= 100) {
+                const result3 = calculateSLA(sla3, period, timeConfig);
+                document.getElementById(`compare-${period}-3`).textContent = result3.formattedDowntime;
+            } else {
+                document.getElementById(`compare-${period}-3`).textContent = '--';
+            }
+        });
     }
     
     function displayError() {

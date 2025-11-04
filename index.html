@@ -31,11 +31,46 @@
             <section class="input-section" aria-labelledby="config-heading">
                 <h2 id="config-heading">Calculator Settings</h2>
                 
-                <!-- Primary SLA Input -->
-                <div class="input-group">
-                    <label for="sla-target">SLA Target (%)</label>
-                    <input type="number" id="sla-target" min="0" max="100" step="0.01" value="99.9" placeholder="99.9" aria-describedby="sla-help">
-                    <div id="sla-help" class="field-help">Enter your desired SLA percentage between 0 and 100</div>
+                <!-- Comparison Mode Toggle -->
+                <div class="toggle-section">
+                    <div class="toggle-group">
+                        <label class="toggle-label" for="comparison-mode">
+                            <input type="checkbox" id="comparison-mode" class="toggle-input" aria-describedby="comparison-help">
+                            <span class="toggle-slider" role="presentation"></span>
+                            Compare Multiple SLAs
+                        </label>
+                        <div id="comparison-help" class="field-help">Compare up to 3 different SLA targets side by side</div>
+                    </div>
+                </div>
+
+                <!-- Single SLA Input (default mode) -->
+                <div id="single-sla-mode">
+                    <div class="input-group">
+                        <label for="sla-target">SLA Target (%)</label>
+                        <input type="number" id="sla-target" min="0" max="100" step="0.01" value="99.9" placeholder="99.9" aria-describedby="sla-help">
+                        <div id="sla-help" class="field-help">Enter your desired SLA percentage between 0 and 100</div>
+                    </div>
+                </div>
+
+                <!-- Multiple SLA Inputs (comparison mode) -->
+                <div id="comparison-sla-mode" style="display: none;">
+                    <div class="comparison-inputs">
+                        <div class="input-group">
+                            <label for="sla-target-1">SLA Target 1 (%)</label>
+                            <input type="number" id="sla-target-1" min="0" max="100" step="0.01" value="99.9" placeholder="99.9" aria-describedby="sla-help-1">
+                            <div id="sla-help-1" class="field-help">First SLA to compare</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="sla-target-2">SLA Target 2 (%)</label>
+                            <input type="number" id="sla-target-2" min="0" max="100" step="0.01" value="99.95" placeholder="99.95" aria-describedby="sla-help-2">
+                            <div id="sla-help-2" class="field-help">Second SLA to compare</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="sla-target-3">SLA Target 3 (%)</label>
+                            <input type="number" id="sla-target-3" min="0" max="100" step="0.01" value="99.99" placeholder="99.99" aria-describedby="sla-help-3">
+                            <div id="sla-help-3" class="field-help">Third SLA to compare</div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Advanced Options Toggle -->
@@ -151,7 +186,9 @@
             <!-- Results Section -->
             <section class="results-section" aria-labelledby="results-heading" aria-live="polite">
                 <h2 id="results-heading">Downtime Allowances</h2>
-                <div class="results-grid">
+                
+                <!-- Single SLA Results -->
+                <div id="single-results" class="results-grid">
                     <div class="result-card">
                         <h3>Per Minute</h3>
                         <div class="result-value" id="downtime-minute" aria-label="Allowed downtime per minute">--</div>
@@ -185,6 +222,66 @@
                     <div class="result-card">
                         <h3>Yearly</h3>
                         <div class="result-value" id="downtime-year" aria-label="Allowed downtime per year">--</div>
+                    </div>
+                </div>
+
+                <!-- Comparison Results Table -->
+                <div id="comparison-results" style="display: none;">
+                    <div class="comparison-table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Time Period</th>
+                                    <th id="sla-header-1">SLA 1: <span class="sla-value">--</span></th>
+                                    <th id="sla-header-2">SLA 2: <span class="sla-value">--</span></th>
+                                    <th id="sla-header-3">SLA 3: <span class="sla-value">--</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="period-label">Per Minute</td>
+                                    <td id="compare-minute-1" class="comparison-value">--</td>
+                                    <td id="compare-minute-2" class="comparison-value">--</td>
+                                    <td id="compare-minute-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Per Hour</td>
+                                    <td id="compare-hour-1" class="comparison-value">--</td>
+                                    <td id="compare-hour-2" class="comparison-value">--</td>
+                                    <td id="compare-hour-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Daily</td>
+                                    <td id="compare-day-1" class="comparison-value">--</td>
+                                    <td id="compare-day-2" class="comparison-value">--</td>
+                                    <td id="compare-day-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Weekly</td>
+                                    <td id="compare-week-1" class="comparison-value">--</td>
+                                    <td id="compare-week-2" class="comparison-value">--</td>
+                                    <td id="compare-week-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Monthly</td>
+                                    <td id="compare-month-1" class="comparison-value">--</td>
+                                    <td id="compare-month-2" class="comparison-value">--</td>
+                                    <td id="compare-month-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Quarterly</td>
+                                    <td id="compare-quarter-1" class="comparison-value">--</td>
+                                    <td id="compare-quarter-2" class="comparison-value">--</td>
+                                    <td id="compare-quarter-3" class="comparison-value">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="period-label">Yearly</td>
+                                    <td id="compare-year-1" class="comparison-value">--</td>
+                                    <td id="compare-year-2" class="comparison-value">--</td>
+                                    <td id="compare-year-3" class="comparison-value">--</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
